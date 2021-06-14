@@ -83,6 +83,7 @@ function editSubject(e) {
 	var saveButton = document.createElement("button");
 	saveButton.className = "btn-success btn btn-sm float-right edit edit-btn";
 	saveButton.innerHTML = 'Save';
+	saveButton.setAttribute('class','generated_save_btn btn-success btn btn-sm float-right edit edit-btn')
 	saveButton.onclick = function(e) {
 		e.preventDefault();
 		var name = nameField.value;
@@ -103,6 +104,7 @@ function editSubject(e) {
 	var cancelButton = document.createElement("button");
 	cancelButton.className = "btn-danger btn btn-sm float-right delete del-btn";
 	cancelButton.innerHTML = 'Cancel';
+	cancelButton.setAttribute('class','generated_cancel_btn btn-danger btn btn-sm float-right delete del-btn')
 	cancelButton.onclick = function(e) {
 		e.preventDefault();
 		updateSubject(subjectModelList);
@@ -341,6 +343,7 @@ function updateTiming(timings) {
 		deleteButton.className = "btn-danger btn btn-sm float-right delete del-btn";
 		deleteButton.innerHTML = 'Delete';
 		deleteButton.setAttribute('onclick','removeTiming(event)')
+
 
 		li.appendChild(document.createTextNode(timings[s]['start_time'] + " " + timings[s]['end_time'] + " " + timings[s]['subject'] ));
 		li.appendChild(deleteButton);

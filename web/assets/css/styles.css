@@ -78,7 +78,7 @@ ul {
 }
 
 a {
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 img {
@@ -244,10 +244,9 @@ img {
 
 .home__img {
   /* position: absolute; */
-  right: 0;
+  right: 50%;
   bottom: 0;
-  width: 50%;
-  height: 50%;
+  width: 30vw;
 }
 
 /*BUTTONS*/
@@ -483,11 +482,6 @@ img {
     margin-right: var(--mb-4);
   }
 
-  .home__img {
-    width: auto;
-    /* bottom: 15%; */
-  }
-
   .about__container,
   .skills__container {
     grid-template-columns: repeat(2, 1fr);
@@ -521,10 +515,12 @@ img {
     margin-right: auto;
   }
 }
+
 body {
   margin: 0;
   min-width: 250px;
 }
+
 /* ---------------------------------------------------------------------------------- */
 
 /* Include the padding and border in an element's total width and height */
@@ -645,31 +641,35 @@ input {
   background-color: #bbb;
 }
 
-.AddSubject{
+.AddSubject {
   padding-left: 20%;
   padding-right: 20%;
 }
-.list_item_link{
-  width:100%;
+
+.list_item_link {
+  width: 100%;
   display: flex;
-  justify-content: space-around ;
-  
+  justify-content: space-around;
+
 }
+
 /* div {
   border: 2px solid black;
 } */
 
-.del-btn, .edit-btn{
+.del-btn,
+.edit-btn {
   margin-right: 2vw;
 }
 
-.list-group-item > a{
+.list-group-item>a {
   margin-left: 2vw;
   position: absolute;
-  right:50%;
+  right: 50%;
   font-family: 'Courier New', Courier, monospace;
 }
-.time-table{
+
+.time-table {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -679,22 +679,31 @@ input {
   overflow: hidden;
   background-color: #333333;
 }
-.days-link{
-  padding : 1%;
-  color:white;
+
+.days-link {
+  padding: 1%;
+  color: white;
   cursor: pointer;
 }
+
 .days-link:hover {
-    background: var(--first-color);
-    color: white;
+  background: var(--first-color);
+  color: white;
 }
-.days-link.selected{
+
+.days-link.selected {
   background-color: var(--first-color);
-  color : white;
+  color: white;
 }
-.submit-div{
+
+.submit-div {
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 10px;
+}
+
+.generate_save_btn,.generate_cancel_btn{
+  width: 20px;
+  height: 10px;
 }

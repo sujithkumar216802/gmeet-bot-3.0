@@ -14,19 +14,19 @@ opt.add_argument("start-maximized")
 # opt.add_argument("headless")
 opt.add_experimental_option("prefs", { "profile.default_content_setting_values.media_stream_mic": 1, "profile.default_content_setting_values.media_stream_camera": 1,"profile.default_content_setting_values.notifications": 1})
 bot = webdriver.Chrome(chrome_options=opt,executable_path="chromedriver.exe")
-def login(email, pas):
-    bot.get("https://accounts.google.com/signin/v2/identifier?ltmpl=meet&continue=https%3A%2F%2Fmeet.google.com%3Fhs%3D193&&o_ref=https%3A%2F%2Fmeet.google.com%2F_meet%2Fwhoops%3Fsc%3D232%26alias%3Dmymeetingraheel&_ga=2.262670348.1240836039.1604695943-1869502693.1604695943&flowName=GlifWebSignIn&flowEntry=ServiceLogin")
-    time.sleep(2)
-    email_in = bot.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input")
-    email_in.send_keys(email)
-    next_btn = bot.find_elements_by_xpath('//*[@id ="identifierNext"]')
-    next_btn[0].click()
-    time.sleep(2)
-    pas_in = bot.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input")
-    pas_in.send_keys(pas)
-    next1_btn = bot.find_elements_by_xpath('//*[@id ="passwordNext"]')
-    next1_btn[0].click()
-    time.sleep(2)
+# def login(email, pas):
+#     bot.get("https://accounts.google.com/signin/v2/identifier?ltmpl=meet&continue=https%3A%2F%2Fmeet.google.com%3Fhs%3D193&&o_ref=https%3A%2F%2Fmeet.google.com%2F_meet%2Fwhoops%3Fsc%3D232%26alias%3Dmymeetingraheel&_ga=2.262670348.1240836039.1604695943-1869502693.1604695943&flowName=GlifWebSignIn&flowEntry=ServiceLogin")
+#     time.sleep(2)
+#     email_in = bot.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input")
+#     email_in.send_keys(email)
+#     next_btn = bot.find_elements_by_xpath('//*[@id ="identifierNext"]')
+#     next_btn[0].click()
+#     time.sleep(2)
+#     pas_in = bot.find_element_by_xpath("/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input")
+#     pas_in.send_keys(pas)
+#     next1_btn = bot.find_elements_by_xpath('//*[@id ="passwordNext"]')
+#     next1_btn[0].click()
+#     time.sleep(2)
     
 
 def join(meeting_link):
@@ -55,12 +55,12 @@ def join(meeting_link):
         join_btn.click()
         time.sleep(2)
 
-def alwaysOpen(stop_threads):
-    while True:
-        print("Im running")
-        bot.switch_to.window(bot.current_window_handle)
-        if stop_threads():
-            break
+# def alwaysOpen(stop_threads):
+#     while True:
+#         print("Im running")
+#         bot.switch_to.window(bot.current_window_handle)
+#         if stop_threads():
+#             break
 def isLoggedin():
     try:
         time.sleep(1)

@@ -43,7 +43,7 @@ eel.init('web')
 @eel.expose
 def getSubject():
     val = connection.execute('SELECT * FROM SUBJECT')
-    ret = []
+    ret = []    
     for x in val:
         obj = {}
         obj['name'] = x[0]
