@@ -24,7 +24,7 @@
     ></script>
     <script type="text/javascript" src="eel.js"></script>
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
-    <title>Portfolio website complete</title>
+    <title>GBO-The Gmeet Bot</title>
   </head>
 
   <body>
@@ -41,20 +41,21 @@
               <a href="#home" class="nav__link active">Home</a>
             </li>
             <li class="nav__item">
-              <a href="#about" class="nav__link">About</a>
+              <a href="#about" class="nav__link">How to Use</a>
             </li>
             <li class="nav__item">
-              <a href="#skills" class="nav__link">Skills</a>
+              <a href="#skills" class="nav__link">Add Subject</a>
             </li>
             <li class="nav__item">
-              <a href="#work" class="nav__link">Work</a>
+              <a href="#work" class="nav__link">Add Time Table</a>
             </li>
             <li class="nav__item">
-              <a href="#contact" class="nav__link">Contact</a>
+              <a href="#contact" class="nav__link">Contact us</a>
             </li>
+            
           </ul>
         </div>
-
+        <a href="#" class="btn btn-sm animated-button thar-three">Sign in</a>
         <div class="nav__toggle" id="nav-toggle">
           <i class="bx bx-menu"></i>
         </div>
@@ -70,10 +71,15 @@
               Hi,<br />I'am <span class="home__title-color">GBO</span
               ><br />Gmeet Bot
             </h1>
-            <a href="#" class="button" style="margin-top: 50px">Get Started</a>
+            <a href="#" class="button" style="margin-top: 10%">Get Started</a>
           </div>
           <div class="home__img">
-            <img src="assets/img/gbo.png"  alt="" />
+            <img
+              src="assets/img/botgif.gif"
+              style="margin-bottom: 70px; padding-top: 20%"
+              alt="newbot"
+              class="newbot-img"
+            />
           </div>
         </div>
 
@@ -85,8 +91,7 @@
           </div>
         </div>
       </section>
-      <section class="about section" id="about"></section>
-      <section class="skills section" id="skills">
+      <section class="about section" id="about">
         <h2 class="section-title">How to use GBOT ?</h2>
 
         <div class="skills__container bd-grid">
@@ -95,9 +100,7 @@
             <p class="skills__text"></p>
             <div class="skills__data">
               <div class="skills__names">
-                <span class="skills__name"
-                  >Enter your Email Id and Password</span
-                >
+                <span class="skills__name">Sign in with Google</span>
               </div>
               <div class="skills__bar skills__html"></div>
               <div>
@@ -146,57 +149,69 @@
           <li>Organize office</li>
         </ul>
       </div> -->
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 col-md-12 col-sm-12">
-            <h2>
-              <strong> Add subject </strong>
-            </h2>
+      <section class="skills__section" id="skills">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <h2>
+                <strong> Add subject </strong>
+              </h2>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="container mt-3">
-        <label id="lblsuccess" class="text-success" style="display: none">
-        </label>
+        <div class="container mt-3">
+          <label id="lblsuccess" class="text-success" style="display: none">
+          </label>
 
-        <form id="addSubjectForm">
-          <div class="row">
-            <div class="col-lg-5 col-md-5 col-sm-5">
-              <input type="text" class="form-control" id="subject-name" />
+          <form id="addSubjectForm">
+            <div class="row">
+              <div class="col-lg-5 col-md-5 col-sm-5">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="subject-name"
+                  style="
+                    border-radius: 0.5rem;
+                    border: 3px solid rgb(74, 94, 124);
+                  "
+                />
+              </div>
+              <div class="col-lg-5 col-md-5 col-sm-5">
+                <input
+                  type="text"
+                  onkeyup="toggleButton('subject-submit')"
+                  class="form-control"
+                  id="url"
+                  style="
+                    border-radius: 0.5rem;
+                    border: 3px solid rgb(74, 94, 124);
+                  "
+                />
+              </div>
+              <br />
+
+              <div class="col-lg-2 col-md-2 col-sm-2">
+                <input
+                  type="submit"
+                  class="btn btn-dark"
+                  id="subject-submit"
+                  value="Submit"
+                  onclick="addSubject(event)"
+                  disabled
+                />
+              </div>
             </div>
-            <div class="col-lg-5 col-md-5 col-sm-5">
-              <input
-                type="text"
-                onkeyup="toggleButton('subject-submit')"
-                class="form-control"
-                id="url"
-              />
-            </div>
-            <br />
+          </form>
+          <h3 class="mt-4">Subjects</h3>
+          <form id="subjectForm">
+            <ul class="list-group" id="subject"></ul>
+          </form>
+        </div>
+      </section>
 
-            <div class="col-lg-2 col-md-2 col-sm-2">
-              <input
-                type="submit"
-                class="btn btn-dark"
-                id="subject-submit"
-                value="Submit"
-                onclick="addSubject(event)"
-                disabled
-              />
-            </div>
-          </div>
-        </form>
-
-        <h3 class="mt-4">Subjects</h3>
-
-        <form id="subjectForm">
-          <ul class="list-group" id="subject"></ul>
-        </form>
-      </div>
-      
       <!--===== WORK =====-->
-      <section class="work section" id="work">
+      <section class="work__section" id="work">
         <h2 class="section-title">Add a time table</h2>
         <ul class="time-table" id="days">
           <li class="days-link selected" style="float: left">

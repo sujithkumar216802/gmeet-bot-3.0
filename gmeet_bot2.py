@@ -8,6 +8,13 @@ from selenium.webdriver.chrome.options import Options
 import subprocess
 import sqlite3
 
+def login_to_google():
+    x=subprocess.Popen('cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+    opt=Options()
+    opt.add_argument("start-maximized")
+    opt.add_experimental_option("debuggerAddress","localhost:8989")
+    driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+    driver.get("https://accounts.google.com/signin/v2/identifier?ltmpl=meet&continue=https%3A%2F%2Fmeet.google.com%3Fhs%3D193&&o_ref=https%3A%2F%2Fmeet.google.com%2F_meet%2Fwhoops%3Fsc%3D232%26alias%3Dmymeetingraheel&_ga=2.262670348.1240836039.1604695943-1869502693.1604695943&flowName=GlifWebSignIn&flowEntry=ServiceLogin")
 
 def is_port_in_use():
     import socket
@@ -15,17 +22,31 @@ def is_port_in_use():
         return s.connect_ex(('localhost', 8989)) == 0
 
 def open(meeting_link):
-    if is_port_in_use()==False:
-        x=subprocess.Popen('cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
-        opt=Options()
-        opt.add_argument("start-maximized")
-        opt.add_experimental_option("debuggerAddress","localhost:8989")
-        driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
-        print("im in false")
-        no_of_tabs=len(driver.window_handles)
-        print(no_of_tabs)
-        driver.get(meeting_link)
-        join(driver)
+    try:
+        if is_port_in_use()==False:
+            x=subprocess.Popen('cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+            opt=Options()
+            opt.add_argument("start-maximized")
+            opt.add_experimental_option("debuggerAddress","localhost:8989")
+            driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+            print("im in false")
+            no_of_tabs=len(driver.window_handles)
+            print(no_of_tabs)
+            driver.get(meeting_link)
+            join(driver)
+    except:
+        if is_port_in_use()==False:
+            x=subprocess.Popen('cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+            opt=Options()
+            opt.add_argument("start-maximized")
+            opt.add_experimental_option("debuggerAddress","localhost:8989")
+            driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+            print("im in false")
+            no_of_tabs=len(driver.window_handles)
+            print(no_of_tabs)
+            driver.get(meeting_link)
+            join(driver)
+
     elif is_port_in_use()==True:
         opt=Options()
         opt.add_experimental_option("debuggerAddress","localhost:8989")
