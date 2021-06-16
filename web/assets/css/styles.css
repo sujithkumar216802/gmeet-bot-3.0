@@ -722,7 +722,7 @@ input {
   height: 10px;
 }
 
-a.animated-button.thar-three {
+button.animated-button.thar-three {
 	color: #000;
   font-size: 120%;
   padding: 0.7%;
@@ -732,17 +732,17 @@ a.animated-button.thar-three {
 	border: 2px solid #F7CA18;
 	transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1); 
 }
-a.animated-button.thar-three:hover {
+button.animated-button.thar-three:hover {
 	color: #000 !important;
 	background-color: transparent;
 	text-shadow: nthree;
 }
-a.animated-button.thar-three:hover:before {
+button.animated-button.thar-three:hover:before {
 	left: 0%;
 	right: auto;
 	width: 100%;
 }
-a.animated-button.thar-three:before {
+button.animated-button.thar-three:before {
 	display: block;
 	position: absolute;
 	top: 0px;

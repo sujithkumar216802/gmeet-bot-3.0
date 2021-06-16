@@ -1,7 +1,14 @@
 import eel
 import sqlite3
+import subprocess
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.keys import Keys
 
-connection = sqlite3.connect('database.db')
+
+
+connection = sqlite3.connect('database.db',check_same_thread=False)
 
 #better way is just to create a bloody primary key
 connection.execute('''CREATE TABLE IF NOT EXISTS SUBJECT
@@ -35,8 +42,18 @@ connection.commit()
 eel.init('web')
 
 
-
-
+@eel.expose
+def login_to_google():
+    x=subprocess.Popen('cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+    opt=Options()
+    opt.add_argument("start-maximized")
+    opt.add_experimental_option("debuggerAddress","localhost:8989")
+    driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+    driver.get("https://accounts.google.com/signin/v2/identifier?ltmpl=meet&continue=https%3A%2F%2Fmeet.google.com%3Fhs%3D193&&o_ref=https%3A%2F%2Fmeet.google.com%2F_meet%2Fwhoops%3Fsc%3D232%26alias%3Dmymeetingraheel&_ga=2.262670348.1240836039.1604695943-1869502693.1604695943&flowName=GlifWebSignIn&flowEntry=ServiceLogin")
+    driver.minimize_window()  
+    driver.maximize_window()  
+    # driver.minimize_window()  
+    # driver.maximize_window() 
 
 
 
@@ -125,3 +142,5 @@ def editAllTimingOfaSubject(new, old):
 
 
 eel.start('index.html')
+
+

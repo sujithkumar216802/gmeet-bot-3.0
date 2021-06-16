@@ -7,14 +7,12 @@ import os
 from selenium.webdriver.chrome.options import Options
 import subprocess
 import sqlite3
+import eel
+from gtts import gTTS 
+from playsound import playsound
 
-def login_to_google():
-    x=subprocess.Popen('cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
-    opt=Options()
-    opt.add_argument("start-maximized")
-    opt.add_experimental_option("debuggerAddress","localhost:8989")
-    driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
-    driver.get("https://accounts.google.com/signin/v2/identifier?ltmpl=meet&continue=https%3A%2F%2Fmeet.google.com%3Fhs%3D193&&o_ref=https%3A%2F%2Fmeet.google.com%2F_meet%2Fwhoops%3Fsc%3D232%26alias%3Dmymeetingraheel&_ga=2.262670348.1240836039.1604695943-1869502693.1604695943&flowName=GlifWebSignIn&flowEntry=ServiceLogin")
+
+
 
 def is_port_in_use():
     import socket
@@ -22,8 +20,10 @@ def is_port_in_use():
         return s.connect_ex(('localhost', 8989)) == 0
 
 def open(meeting_link):
+    print("im in open function")
     try:
         if is_port_in_use()==False:
+            print("im in try if")
             x=subprocess.Popen('cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
             opt=Options()
             opt.add_argument("start-maximized")
@@ -34,8 +34,23 @@ def open(meeting_link):
             print(no_of_tabs)
             driver.get(meeting_link)
             join(driver)
+
+        elif is_port_in_use()==True:
+            print("im in try elif")
+            opt=Options()
+            opt.add_experimental_option("debuggerAddress","localhost:8989")
+            opt.add_argument("start-maximized")
+            driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+            print("im in true")
+            no_of_tabs=len(driver.window_handles)
+            print(no_of_tabs)
+            driver.execute_script("window.open('about:blank', 'tab{}');".format(no_of_tabs+1))
+            driver.switch_to.window('tab{}'.format(no_of_tabs+1))
+            driver.get(meeting_link)
+            join(driver)
     except:
         if is_port_in_use()==False:
+            print("im in except if")
             x=subprocess.Popen('cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
             opt=Options()
             opt.add_argument("start-maximized")
@@ -47,18 +62,19 @@ def open(meeting_link):
             driver.get(meeting_link)
             join(driver)
 
-    elif is_port_in_use()==True:
-        opt=Options()
-        opt.add_experimental_option("debuggerAddress","localhost:8989")
-        opt.add_argument("start-maximized")
-        driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
-        print("im in true")
-        no_of_tabs=len(driver.window_handles)
-        print(no_of_tabs)
-        driver.execute_script("window.open('about:blank', 'tab{}');".format(no_of_tabs+1))
-        driver.switch_to.window('tab{}'.format(no_of_tabs+1))
-        driver.get(meeting_link)
-        join(driver)
+        elif is_port_in_use()==True:
+            print("im in except elif")
+            opt=Options()
+            opt.add_experimental_option("debuggerAddress","localhost:8989")
+            opt.add_argument("start-maximized")
+            driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+            print("im in true")
+            no_of_tabs=len(driver.window_handles)
+            print(no_of_tabs)
+            driver.execute_script("window.open('about:blank', 'tab{}');".format(no_of_tabs+1))
+            driver.switch_to.window('tab{}'.format(no_of_tabs+1))
+            driver.get(meeting_link)
+            join(driver)
         
 def join(driver):
     time.sleep(2)
@@ -73,10 +89,29 @@ def join(driver):
 
     # join_btn = driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[2]/div/div[1]/div[2]/div/div[2]/div/div[1]/div[1]/span")
     # join_btn.click()
-    if aval == "true" and vval=="true":
-        join_btn = driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span")
-        join_btn.click()
-        time.sleep(2)
+    iterating_var=0
+    while iterating_var!=5:
+        aval = audio_btn.get_attribute("data-is-muted")
+        vval = video_btn.get_attribute("data-is-muted")
+        print("attempt no."+str(iterating_var))
+        try:
+            if aval == "true" and vval=="true":
+                join_btn = driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span")
+                join_btn.click()
+                time.sleep(2)
+                break
+            else:
+                iterating_var+=1
+                driver.implicitly_wait(1)
+                continue
+        except:
+            if iterating_var!=5:
+                driver.implicitly_wait(1)
+                continue
+            elif i==5:
+                break
+
+
 
 def isLoggedin():
     try:
@@ -116,6 +151,8 @@ def getLink(sub):
         if x[0]==sub:
             return x[1]
 
+# def initFunction():
+language = 'en-us'
 day = dt.date.today().isoweekday()+1
 if day==8:
     day=1
@@ -129,11 +166,22 @@ while True:
         time_index=startArray.index(time2)
         subjectName=subjectArray[time_index]
         print("subject - "+subjectName)
+        print("Link - "+getLink(subjectName))
+        myobj = gTTS(text="Joining "+subjectName+" class", lang=language, slow=False)
+        myobj.save("class.mp3")
+        playsound("class.mp3")
+        os.remove("class.mp3")
         open(getLink(subjectName))   
-        raise ValueError
-    except ValueError:
         time.sleep(50)
-        pass   
+    except ValueError:
+        pass  
+# ------------------- 
+# eelThread=Thread(target=eelStart)
+# initThread=Thread(target=initFunction)
+# initThread.start()
+# eelThread.start()
+# eelThread.join()    
+# ---------------------
 
 # print(startArray)
 # print(subjectArray)

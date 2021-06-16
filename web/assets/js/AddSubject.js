@@ -27,7 +27,7 @@ function addSubject(e) {
 	var url = document.getElementById('url').value;
 
 	if(name.trim() == "" || name.trim() == null ||url.trim() == "" || url.trim() == null){
-		console.log('fk off');
+		
 		return;
 	}
 
@@ -89,7 +89,7 @@ function editSubject(e) {
 		var name = nameField.value;
 		var url = urlField.value;
 		if(name.trim() == "" || name.trim() == null ||url.trim() == "" || url.trim() == null) {
-			console.log('fk off');
+			
 		}
 		else {
 			eel.updateSubject({
@@ -194,7 +194,7 @@ function addTiming(e) {
 	console.log(startTime ,endTime, subject, day);
 
 	if(startTime.trim() == "" || startTime.trim()==null || endTime.trim() == "" || endTime.trim()==null) {
-		console.log('fkoff');
+		
 		return;
 	}
 
@@ -266,8 +266,18 @@ function editTiming(e) {
 	//COPY PASTE SPINNER CODE
 	var spinner = document.getElementById('spinner');
 	var spinnerCopy = document.createElement('div');
+	
 	spinnerCopy.className = spinner.className;
 	spinnerCopy.innerHTML = spinner.innerHTML; 
+		var subjectIndex = -1;
+		for(x in subjectModelList) {
+			if(subjectModelList[x]['name']==timingModelList[index]['subject']) {
+				subjectIndex = x;
+			}
+		}
+		spinnerCopy.children[1].selectedIndex = subjectIndex.toString();
+
+
 	//probably useless
 	//spinner.firstChild.setAttribute('for', 'subject-drop-down-edit');
 	//spinner.lastChild.setAttribute('id','subject-drop-down-edit'); 
@@ -286,7 +296,7 @@ function editTiming(e) {
 		console.log(startTime ,endTime, subject, day);
 
 		if(startTime.trim() == "" || startTime.trim()==null || endTime.trim() == "" || endTime.trim()==null) {
-			console.log('fkoff');
+			
 		}
 		else {
 			eel.updateTiming({
@@ -371,4 +381,7 @@ function eelGetTimings() {
 
 function toggleButton(btnID) {
 	document.getElementById(btnID).disabled = false;
+}
+function signIn(){
+	eel.login_to_google()
 }
