@@ -1,0 +1,1 @@
+`python -m eel gmeet_bot2.py web`

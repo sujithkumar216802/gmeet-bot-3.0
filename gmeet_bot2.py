@@ -10,6 +10,151 @@ import sqlite3
 import eel
 from gtts import gTTS 
 from playsound import playsound
+from threading import Thread
+
+
+connection = sqlite3.connect('database.db',check_same_thread=False)
+
+#better way is just to create a bloody primary key
+connection.execute('''CREATE TABLE IF NOT EXISTS SUBJECT
+         (
+         NAME    TEXT    NOT NULL,
+         URL     TEXT    NOT NULL,
+         PRIMARY KEY('NAME')
+         );''')
+
+#connection.execute('''ALTER TABLE SUBJECT ADD UNIQUE INDEX(NAME, URL);''')
+#foreign key reference is useless
+connection.execute('''CREATE TABLE IF NOT EXISTS TIMING
+         (
+         DAY      INT    NOT NULL,
+         STIME    TEXT   NOT NULL,
+         ETIME    TEXT   NOT NULL,
+         SUBJECT  TEXT   NOT NULL,
+         UNIQUE(DAY, STIME, ETIME, SUBJECT)
+         FOREIGN KEY('SUBJECT') REFERENCES 'SUBJECT'('NAME') ON DELETE CASCADE
+         );''')
+
+#only 1 value ffs
+connection.execute('''CREATE TABLE IF NOT EXISTS ACCOUNT
+         (
+            EMAIL     TEXT   NOT NULL,
+            PASSWORD  TEXT   NOT NULL
+         );''')
+
+connection.commit()
+
+@eel.expose
+def login_to_google():
+    x=subprocess.Popen('cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Default"',shell=True)
+    opt=Options()
+    opt.add_argument("start-maximized")
+    opt.add_experimental_option("debuggerAddress","localhost:8989")
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
+    # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
+    driver.get("https://accounts.google.com/signin/v2/identifier?ltmpl=meet&continue=https%3A%2F%2Fmeet.google.com%3Fhs%3D193&&o_ref=https%3A%2F%2Fmeet.google.com%2F_meet%2Fwhoops%3Fsc%3D232%26alias%3Dmymeetingraheel&_ga=2.262670348.1240836039.1604695943-1869502693.1604695943&flowName=GlifWebSignIn&flowEntry=ServiceLogin")
+    driver.minimize_window()  
+    driver.maximize_window()  
+    # driver.minimize_window()  
+    # driver.maximize_window() 
+
+@eel.expose
+def getSubject():
+    val = connection.execute('SELECT * FROM SUBJECT')
+    ret = []    
+    for x in val:
+        obj = {}
+        obj['name'] = x[0]
+        obj['url'] = x[1]
+        ret.append(obj)
+    eel.updateSubject(ret)
+
+@eel.expose
+def addSubject(subject):
+    connection.execute('INSERT OR IGNORE INTO SUBJECT VALUES (\'{}\',\'{}\');'.format(subject['name'],subject['url']))
+    connection.commit()
+    getSubject()
+
+@eel.expose
+def deleteSubject(subject):
+    connection.execute('DELETE FROM SUBJECT WHERE NAME = \'{}\' AND URL = \'{}\';'.format(subject['name'],subject['url']))
+    connection.commit()
+    deleteAllTimingOfaSubject(subject['name'])
+    getSubject()
+    
+@eel.expose
+def updateSubject(new, old):
+    connection.execute('UPDATE SUBJECT SET NAME = \'{}\' , URL = \'{}\' WHERE NAME = \'{}\' AND URL = \'{}\''.format(new['name'], new['url'], old['name'], old['url']))
+    connection.commit()
+    editAllTimingOfaSubject(new['name'], old['name'])
+    getSubject()
+
+
+currDay = 1
+
+@eel.expose
+def getTiming(day):
+    print(day)
+    val = connection.execute('SELECT * FROM TIMING WHERE DAY = {};'.format(day))
+    ret = []
+    for x in val:
+        obj = {}
+        obj['day'] = x[0]
+        obj['start_time'] = x[1]
+        obj['end_time'] = x[2]
+        obj['subject'] = x[3]
+        ret.append(obj)
+    currDay = day
+    eel.updateTiming(ret)
+
+
+@eel.expose
+def addTiming(timing):
+    connection.execute('INSERT OR IGNORE INTO TIMING VALUES ({},\'{}\',\'{}\',\'{}\');'.format(timing['day'],timing['start_time'],timing['end_time'], timing['subject']))
+    connection.commit()
+    currDay = timing['day']
+    print(currDay)
+    getTiming(currDay)
+
+@eel.expose
+def deleteTiming(timing):
+    connection.execute('DELETE FROM TIMING WHERE DAY = \'{}\' AND STIME = \'{}\' AND ETIME = \'{}\' AND SUBJECT = \'{}\';'.format(timing['day'],timing['start_time'],timing['end_time'], timing['subject']))
+    connection.commit()
+    currDay = timing['day']
+    getTiming(timing['day'])
+    
+    
+@eel.expose
+def updateTiming(new, old):
+    connection.execute('UPDATE TIMING SET DAY = \'{}\' , STIME = \'{}\', ETIME = \'{}\' , SUBJECT = \'{}\' WHERE DAY = \'{}\' AND STIME = \'{}\' AND ETIME = \'{}\' AND SUBJECT = \'{}\';  '.format(new['day'],new['start_time'],new['end_time'], new['subject'],old['day'],old['start_time'],old['end_time'], old['subject']))
+    connection.commit()
+    currDay = new['day']
+    getTiming(new['day'])
+    
+
+def deleteAllTimingOfaSubject(subject):
+    connection.execute('DELETE FROM TIMING WHERE SUBJECT = \'{}\''.format(subject))
+    connection.commit()
+    getTiming(currDay)
+
+
+def editAllTimingOfaSubject(new, old):
+    connection.execute('UPDATE TIMING SET SUBJECT = \'{}\' WHERE SUBJECT = \'{}\';  '.format(new, old))
+    connection.commit()
+    getTiming(currDay)
+
+
+
+def StartEel():
+    eel.init('web')
+
+    eel.start('index.html')
+
+
+threat = Thread(target=StartEel)
+threat.start()
+
+print('hello')
 
 
 
@@ -24,23 +169,25 @@ def open(meeting_link):
     try:
         if is_port_in_use()==False:
             print("im in try if")
-            x=subprocess.Popen('cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+            x=subprocess.Popen('cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Default"',shell=True)
             opt=Options()
             opt.add_argument("start-maximized")
             opt.add_experimental_option("debuggerAddress","localhost:8989")
-            driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+            # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
             print("im in false")
             no_of_tabs=len(driver.window_handles)
             print(no_of_tabs)
             driver.get(meeting_link)
             join(driver)
 
-        elif is_port_in_use()==True:
+        else:
             print("im in try elif")
             opt=Options()
             opt.add_experimental_option("debuggerAddress","localhost:8989")
             opt.add_argument("start-maximized")
-            driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+            #driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
             print("im in true")
             no_of_tabs=len(driver.window_handles)
             print(no_of_tabs)
@@ -51,23 +198,25 @@ def open(meeting_link):
     except:
         if is_port_in_use()==False:
             print("im in except if")
-            x=subprocess.Popen('cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\shara\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+            x=subprocess.Popen('cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Default"',shell=True)
             opt=Options()
             opt.add_argument("start-maximized")
             opt.add_experimental_option("debuggerAddress","localhost:8989")
-            driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+            # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
             print("im in false")
             no_of_tabs=len(driver.window_handles)
             print(no_of_tabs)
             driver.get(meeting_link)
             join(driver)
 
-        elif is_port_in_use()==True:
+        else:
             print("im in except elif")
             opt=Options()
             opt.add_experimental_option("debuggerAddress","localhost:8989")
             opt.add_argument("start-maximized")
-            driver=webdriver.Chrome(executable_path="chromedriver.exe",options=opt)
+            # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
+            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
             print("im in true")
             no_of_tabs=len(driver.window_handles)
             print(no_of_tabs)
@@ -108,9 +257,8 @@ def join(driver):
             if iterating_var!=5:
                 driver.implicitly_wait(1)
                 continue
-            elif i==5:
+            elif iterating_var==5:
                 break
-
 
 
 def isLoggedin():
@@ -121,27 +269,18 @@ def isLoggedin():
         print("Im inside the meeting")
     except :
         isLoggedin()
-connection = sqlite3.connect('database.db')   
-def getTiming(day):
+
+def getTimingNonUI(day):
     val = connection.execute('SELECT * FROM TIMING WHERE DAY = {};'.format(day))
     ret = []
     for x in val:
-        obj = {}
-        obj['day'] = x[0]
-        obj['start_time'] = x[1]
-        obj['end_time'] = x[2]
-        obj['subject'] = x[3]
         ret.append(x[1])
     return ret
+
 def getSubjectForDay(day):
     val = connection.execute('SELECT * FROM TIMING WHERE DAY = {};'.format(day))
     ret = []
     for x in val:
-        obj = {}
-        obj['day'] = x[0]
-        obj['start_ time'] = x[1]
-        obj['end_time'] = x[2]
-        obj['subject'] = x[3]
         ret.append(x[3])
     return ret
 
@@ -152,16 +291,21 @@ def getLink(sub):
             return x[1]
 
 # def initFunction():
-language = 'en-us'
-day = dt.date.today().isoweekday()+1
-if day==8:
-    day=1
-print(day)
-startArray=getTiming(day)
-subjectArray=getSubjectForDay(day)
 while True:
+    language = 'en-us'
+    day = dt.date.today().isoweekday()+1
+    if day==8:
+        day=1
+    print(day)
+    startArray=getTimingNonUI(day)
+    subjectArray=getSubjectForDay(day)
+
+
     time2 = dt.datetime.now()
     time2 = time.strftime("%H:%M")
+
+    print('time2 : ' + time2)
+    print('start array : ' + repr(startArray))
     try:
         time_index=startArray.index(time2)
         subjectName=subjectArray[time_index]
@@ -172,9 +316,9 @@ while True:
         playsound("class.mp3")
         os.remove("class.mp3")
         open(getLink(subjectName))   
-        time.sleep(50)
     except ValueError:
-        pass  
+        pass
+    time.sleep(50)
 # ------------------- 
 # eelThread=Thread(target=eelStart)
 # initThread=Thread(target=initFunction)
