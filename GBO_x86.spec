@@ -5,9 +5,9 @@ block_cipher = None
 
 
 a = Analysis(['GBO_x86.py'],
-             pathex=['C:\\Users\\shara\\Desktop\\bot_app'],
+             pathex=['C:\\Users\\IEUser\\Downloads\\gmeet-bot-3.0'],
              binaries=[],
-             datas=[('C:\\Users\\shara\\AppData\\Local\\Programs\\Python\\Python38-32\\lib\\site-packages\\eel\\eel.js', 'eel'), ('web', 'web')],
+             datas=[('C:\\Users\\IEUser\\AppData\\Local\\Programs\\Python\\Python38\\lib\\site-packages\\eel\\eel.js', 'eel'), ('web', 'web')],
              hiddenimports=['bottle_websocket'],
              hookspath=[],
              runtime_hooks=[],
@@ -31,4 +31,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True , icon='web\\assets\\img\\bot_icon.ico')
+          console=True )

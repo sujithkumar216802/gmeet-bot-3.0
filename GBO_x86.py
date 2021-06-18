@@ -167,82 +167,95 @@ def is_port_in_use():
 
 def open(meeting_link):
     print("im in open function")
-    try:
-        if is_port_in_use()==False:
-            print("im in try if")
-            x=subprocess.Popen('c: & cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
-            opt=Options()
-            opt.add_argument("start-maximized")
-            opt.add_experimental_option("debuggerAddress","localhost:8989")
     
-            # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
-            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
-            print("im in false")
-            no_of_tabs=len(driver.window_handles)
-            
-            driver.get(meeting_link)
-            join(driver)
+    if is_port_in_use()==False:
+        print("im in try if")
+        x=subprocess.Popen('c: & cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+        print(is_port_in_use())
+        opt=Options()
+        opt.add_argument("start-maximized")
+        opt.add_experimental_option("debuggerAddress","localhost:8989")
 
-        else:
-            print("im in try elif")
-            opt=Options()
-            opt.add_experimental_option("debuggerAddress","localhost:8989")
-            
-            opt.add_argument("start-maximized")
-            #driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
-            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
-            print("im in true")
-            no_of_tabs=len(driver.window_handles)
-            
-            driver.execute_script("window.open('about:blank', 'tab{}');".format(no_of_tabs+1))
-            driver.switch_to.window('tab{}'.format(no_of_tabs+1))
-            driver.get(meeting_link)
-            join(driver)
-    except:
-        if is_port_in_use()==False:
-            print("im in except if")
-            x=subprocess.Popen('c: & cd c:\\Program Files (x86)\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
-            opt=Options()
-            opt.add_argument("start-maximized")
-            opt.add_experimental_option("debuggerAddress","localhost:8989")
-            
-            # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
-            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
-            print("im in false")
-            no_of_tabs=len(driver.window_handles)
-            
-            driver.get(meeting_link)
-            join(driver)
+        # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
+        driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
+        print("im in false")
+        no_of_tabs=len(driver.window_handles)
+        print(no_of_tabs)
+        driver.get(meeting_link)
+        print('1')
+        join(driver)
+        print('2')
+    else:
+        print("im in try elif")
+        opt=Options()
+        opt.add_experimental_option("debuggerAddress","localhost:8989")
+        print(is_port_in_use())
+        opt.add_argument("start-maximized")
+        #driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
+        driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
+        print("im in true")
+        no_of_tabs=len(driver.window_handles)
+        print(no_of_tabs)
+        driver.execute_script("window.open('about:blank', 'tab{}');".format(no_of_tabs+1))
+        driver.switch_to.window('tab{}'.format(no_of_tabs+1))
+        driver.get(meeting_link)
+        join(driver)
+    # except:
+    #     if is_port_in_use()==False:
+    #         print("im in except if")
+    #         x=subprocess.Popen('c: & cd c:\\Program Files\\Google\\Chrome\\Application & .\chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\\Users\\%USERNAME%\\AppData\\Local\\Google\\Chrome\\User Data\\Selenium"',shell=True)
+    #         opt=Options()
+    #         opt.add_argument("start-maximized")
+    #         opt.add_experimental_option("debuggerAddress","localhost:8989")
+    #         print(is_port_in_use())
+    #         # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
+    #         driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
+    #         print("im in false")
+    #         no_of_tabs=len(driver.window_handles)
+    #         print(no_of_tabs)
+    #         driver.get(meeting_link)
+    #         join(driver)
 
-        else:
-            print("im in except elif")
-            opt=Options()
-            opt.add_experimental_option("debuggerAddress","localhost:8989")
-            
-            opt.add_argument("start-maximized")
-            # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
-            driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
-            print("im in true")
-            no_of_tabs=len(driver.window_handles)
-            print(no_of_tabs)
-            driver.execute_script("window.open('about:blank', 'tab{}');".format(no_of_tabs+1))
-            driver.switch_to.window('tab{}'.format(no_of_tabs+1))
-            driver.get(meeting_link)
-            join(driver)
+    #     else:
+    #         print("im in except elif")
+    #         opt=Options()
+    #         opt.add_experimental_option("debuggerAddress","localhost:8989")
+    #         print(is_port_in_use())
+    #         opt.add_argument("start-maximized")
+    #         # driver=webdriver.Chrome(executable_path=".\\chromedriver.exe",options=opt)
+    #         driver = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
+    #         print("im in true")
+    #         no_of_tabs=len(driver.window_handles)
+    #         print('tabs : {}'.format(no_of_tabs))
+    #         driver.execute_script("window.open('about:blank', 'tab{}');".format(no_of_tabs+1))
+    #         print('3')
+    #         driver.switch_to.window('tab{}'.format(no_of_tabs+1))
+    #         print('4')
+    #         driver.get(meeting_link)
+    #         print('5')
+    #         join(driver)
+    #         print('6')
         
 def join(driver):
+    print('7')
     driver.maximize_window()
-    audioWait = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div"))
+    print('8')
+    audioWait = WebDriverWait(driver, 20).until(
+        EC.visibility_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div"))
     )
-    videoWait = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div"))
+    print('9')
+    videoWait = WebDriverWait(driver, 20).until(
+        EC.visibility_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div"))
     )
-    joinWait = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span"))
+    print('10')
+    joinWait = WebDriverWait(driver, 20).until(
+        EC.visibility_of_element_located((By.XPATH, "//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[2]/div/div[2]/div/div[1]/div[1]/span"))
     )
+    print('11')
     audio_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div")
+    print('12')
     audio_btn.click()
+    print('13')
     aval = audio_btn.get_attribute("data-is-muted")
     print("Audio Muted : "+aval)
     video_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div")
@@ -257,11 +270,11 @@ def join(driver):
         aval = audio_btn.get_attribute("data-is-muted")
         vval = video_btn.get_attribute("data-is-muted")
         time.sleep(2)
-        if aval==False:
+        if aval=="false":
             audio_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[1]/div/div/div")
             audio_btn.click()
             aval = audio_btn.get_attribute("data-is-muted")
-        if vval==False:
+        if vval=="false":
             video_btn=driver.find_element_by_xpath("//*[@id=\"yDmH0d\"]/c-wiz/div/div/div[9]/div[3]/div/div/div[4]/div/div/div[1]/div[1]/div/div[4]/div[2]/div/div")
             video_btn.click()
             vval = video_btn.get_attribute("data-is-muted")
@@ -337,12 +350,12 @@ while True:
         print("Link - "+getLink(subjectName))
         myobj = gTTS(text="Joining "+subjectName+" class", lang=language, slow=False)
         myobj.save("class.mp3")
-        playsound("class.mp3")
+        #playsound("class.mp3")
         os.remove("class.mp3")
         open(getLink(subjectName))   
     except ValueError:
         pass
-    time.sleep(50)
+    time.sleep(60)
 # ------------------- 
 # eelThread=Thread(target=eelStart)
 # initThread=Thread(target=initFunction)
